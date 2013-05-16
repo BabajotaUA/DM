@@ -2,11 +2,12 @@
 
 #include "partscontroller.h"
 #include "datasaver.h"
-#include "receiver.h"
+#include "receiverinterface.h"
 #include "sender.h"
 #include "speedcounter.h"
 #include "estimatedtimecounter.h"
 #include "downloadinterface.h"
+#include <QtCore/QSharedPointer>
 
 class Download : public QObject, public DownloadInterface
 {
@@ -25,9 +26,10 @@ public:
     void pauseDownload();
     void deleteDownload();
 
-    int getState() const;
+    void newDownloadFactory(ReceiverInterface *receiverImplementation);
+    State getState() const;
 
-private slots:
+public slots:
     void setDownloadInfo(const QList<QNetworkReply::RawHeaderPair> &rawHeaders);
     void saveData(QByteArray *data);
 
@@ -38,13 +40,12 @@ private:
     QString fileDestination;
     qint64 fileSize, partSize;
 
-    void newDownloadFactory();
     void prepareDownload();
     void continueDownload();
     bool downloadInfoVerification();
 
     QSharedPointer<Sender> sender;
-    QSharedPointer<Receiver> receiver;
+    QSharedPointer<ReceiverInterface> receiver;
     QSharedPointer<DataSaver> saver;
     QSharedPointer<PartsController> parts;
     QSharedPointer<SpeedCounter> speedCounter;

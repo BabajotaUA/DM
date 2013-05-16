@@ -12,7 +12,7 @@ public:
     explicit Receiver(QObject *parent = nullptr);
     virtual ~Receiver();
 
-    void replyReceivingStarted(QNetworkReply *newReply);
+    virtual void replyReceivingStarted(QNetworkReply *newReply);
 
 signals:
     void downloadInfoRecived(QList<QNetworkReply::RawHeaderPair>);

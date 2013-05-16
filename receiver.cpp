@@ -4,7 +4,6 @@
 Receiver::Receiver(QObject *parent) :
     QObject(parent)
 {
-
 }
 
 Receiver::~Receiver()
@@ -42,5 +41,5 @@ void Receiver::replyReceivingFinished()
 
 void Receiver::replyReceivingError()
 {
-    qDebug() << "\nERROR:" << reply->errorString() << "\n";
+    qDebug() << "\n(Receiver) ERROR:" << reply->errorString() << "\n";
 }

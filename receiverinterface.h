@@ -1,4 +1,5 @@
 #pragma once
+#include <QtNetwork/QNetworkReply>
 
 class ReceiverInterface
 {

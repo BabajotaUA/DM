@@ -33,7 +33,6 @@ bool PartsController::nextPart()
 
 QPair<qint64, qint64> PartsController::actual() const
 {
-    qDebug() << partList[0] << (partList[1]-1);
     return QPair<qint64, qint64>(partList[0], (partList[1]-1));
 }
 

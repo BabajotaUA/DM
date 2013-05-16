@@ -11,8 +11,6 @@ Download::Download(const QString &source, const QString &destination, QObject *p
     fileName = "";
     fileSize = 0;
     partSize = 0;
-
-    qDebug() << "Download created";
 }
 
 Download::~Download()
@@ -24,7 +22,6 @@ void Download::startDownload()
     switch (currentState)
     {
     case NotReady:
-        newDownloadFactory();
         receiver->replyReceivingStarted(sender->requestDownloadInfo());
         return;
     case Paused:
@@ -45,7 +42,7 @@ void Download::deleteDownload()
 
 }
 
-int Download::getState() const
+Download::State Download::getState() const
 {
     return currentState;
 }
@@ -72,7 +69,6 @@ void Download::setDownloadInfo(const QList<QNetworkReply::RawHeaderPair> &rawHea
 
 void Download::saveData(QByteArray *data)
 {
-    qDebug()<< "Data recived";
     if (parts->nextPart())
     {
         continueDownload();
@@ -85,15 +81,12 @@ void Download::saveData(QByteArray *data)
     saver->save(*data, parts->getParts());
 }
 
-void Download::newDownloadFactory()
+void Download::newDownloadFactory(ReceiverInterface *receiverImplementation)
 {
     sender = QSharedPointer<Sender>(new Sender(sourceURL, this));
-    receiver = QSharedPointer<Receiver>(new Receiver(this));
+    receiver = QSharedPointer<ReceiverInterface>(receiverImplementation);
     speedCounter = QSharedPointer<SpeedCounter>(new SpeedCounter(this));
     timeCounter = QSharedPointer<EstimatedTimeCounter>(new EstimatedTimeCounter(this));
-
-    connect(receiver.data(), SIGNAL(downloadInfoRecived(QList<QNetworkReply::RawHeaderPair>)), SLOT(setDownloadInfo(QList<QNetworkReply::RawHeaderPair>)));
-    connect(receiver.data(), SIGNAL(downloadDataRecived(QByteArray*)), SLOT(saveData(QByteArray*)));
 }
 
 void Download::prepareDownload()
@@ -129,7 +122,7 @@ bool Download::downloadInfoVerification()
     if (fileName.isEmpty())
         fileName = sourceURL.path().split('/').last();
 
-    qDebug() << fileName << "\nsize = " << fileSize;
+    qDebug() << "(Download) " << fileName << "size = " << fileSize;
 
     return true;
 }
