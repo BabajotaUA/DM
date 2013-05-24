@@ -43,6 +43,7 @@ private:
     void prepareDownload();
     void continueDownload();
     bool downloadInfoVerification();
+    void changeDownloadURL(const QString &source);
 
     QSharedPointer<Sender> sender;
     QSharedPointer<ReceiverInterface> receiver;

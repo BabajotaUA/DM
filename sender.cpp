@@ -1,19 +1,18 @@
 #include "sender.h"
 
-Sender::Sender(const QUrl &sourceURL, QObject *parent) :
+Sender::Sender(QObject *parent) :
     QObject(parent)
 {
-    request = QNetworkRequest(sourceURL);
-    request.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
 }
 
 Sender::~Sender()
 {
 }
 
-
-QNetworkReply* Sender::requestDownloadInfo()
+QNetworkReply* Sender::requestDownloadInfo(const QUrl &sourceURL)
 {
+    request = QNetworkRequest(sourceURL);
+    request.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
     return manager.head(request);
 }
 

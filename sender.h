@@ -9,10 +9,10 @@ class Sender : public QObject
 {
     Q_OBJECT
 public:
-    explicit Sender(const QUrl &sourceURL, QObject *parent = nullptr);
+    explicit Sender(QObject *parent = nullptr);
     virtual ~Sender();
 
-    QNetworkReply* requestDownloadInfo();
+    QNetworkReply* requestDownloadInfo(const QUrl &sourceURL);
     QNetworkReply* requestDownloadData(const QPair<qint64, qint64> &part);
 
 private:
