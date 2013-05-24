@@ -7,6 +7,11 @@ ReceiverMock::ReceiverMock(QObject *parent) :
     testData = QByteArray("test_value 123");
 }
 
+ReceiverMock::~ReceiverMock()
+{
+    qDebug() << "\nReceiverMock DELETE!\n";
+}
+
 void ReceiverMock::replyReceivingStarted(QNetworkReply *reply)
 {
     switch (reply->operation())
@@ -40,8 +45,6 @@ QList<QNetworkReply::RawHeaderPair> ReceiverMock::prepareDownloadInfo()
     pair.first = "Accept-Ranges";
     pair.second = "";
     testInfoList.append(pair);
-
-    qDebug() << "(MOCK) " << testInfoList;
 
     return testInfoList;
 }

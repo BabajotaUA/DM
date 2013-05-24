@@ -15,6 +15,7 @@ Download::Download(const QString &source, const QString &destination, QObject *p
 
 Download::~Download()
 {
+    qDebug() << "\nDownload DELETE!\n";
 }
 
 void Download::startDownload()
@@ -22,7 +23,7 @@ void Download::startDownload()
     switch (currentState)
     {
     case NotReady:
-        receiver->replyReceivingStarted(sender->requestDownloadInfo(sourceURL));
+        receiver->replyReceivingStarted(sender.requestDownloadInfo(sourceURL));
         return;
     case Paused:
         continueDownload();
@@ -46,7 +47,7 @@ void Download::changeDownloadURL(const QString &source)
 {
     currentState = NotReady;
     sourceURL = QUrl(source);
-    receiver->replyReceivingStarted(sender->requestDownloadInfo(sourceURL));
+    receiver->replyReceivingStarted(sender.requestDownloadInfo(sourceURL));
 }
 
 Download::State Download::getState() const
@@ -72,7 +73,6 @@ void Download::setDownloadInfo(const QList<QNetworkReply::RawHeaderPair> &rawHea
             auto substringBegin = headValue.indexOf("filename=");
             if (substringBegin > 0)
             {
-                qDebug() << "DEBUG" << substringBegin;
                 fileName = headValue.mid(substringBegin + 10).split('"')[0];
             }
         }
@@ -86,24 +86,22 @@ void Download::setDownloadInfo(const QList<QNetworkReply::RawHeaderPair> &rawHea
 
 void Download::saveData(QByteArray *data)
 {
-    if (parts->nextPart())
+    if (parts.nextPart())
     {
         continueDownload();
     }
     else
     {
+        qDebug() << "\n(Download) FINISHED!\n";
         currentState = Finished;
         emit downloadDataChanged();
     }
-    saver->save(*data, parts->getParts());
+    saver.save(*data, parts.getParts());
 }
 
 void Download::newDownloadFactory(ReceiverInterface *receiverImplementation)
 {
-    sender = QSharedPointer<Sender>(new Sender(this));
     receiver = QSharedPointer<ReceiverInterface>(receiverImplementation);
-    speedCounter = QSharedPointer<SpeedCounter>(new SpeedCounter(this));
-    timeCounter = QSharedPointer<EstimatedTimeCounter>(new EstimatedTimeCounter(this));
 }
 
 void Download::prepareDownload()
@@ -114,19 +112,14 @@ void Download::prepareDownload()
         emit downloadDataChanged();
         return;
     }
-
-    parts = QSharedPointer<PartsController>(new PartsController(fileSize, this));
-    parts->calculation(partSize);
-
-    saver = QSharedPointer<DataSaver>(new DataSaver(fileDestination + fileName, this));
-    saver->prepareFiles(parts->getParts());
-
+    parts.calculation(fileSize, partSize);
+    saver.prepareFiles(fileDestination + fileName, parts.getParts());
     continueDownload();
 }
 
 void Download::continueDownload()
 {
-    receiver->replyReceivingStarted(sender->requestDownloadData(parts->actual()));
+    receiver->replyReceivingStarted(sender.requestDownloadData(parts.actual()));
     currentState = Downloading;
     emit downloadDataChanged();
 }

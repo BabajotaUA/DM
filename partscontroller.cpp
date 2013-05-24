@@ -2,21 +2,21 @@
 #include <QDebug>
 #include <QtCore/QPair>
 
-PartsController::PartsController(qint64 fileSize, QObject *parent) :
+PartsController::PartsController(QObject *parent) :
     QObject(parent)
 {
-    absoluteSize = fileSize;
 }
 
 PartsController::~PartsController()
 {
+    qDebug() << "\nPartsController DELETE!\n";
 }
 
-void PartsController::calculation(qint64 partSize, qint64 startByte)
+void PartsController::calculation(qint64 fileSize, qint64 partSize, qint64 startByte)
 {
-    for (auto endByte = startByte; endByte < absoluteSize; endByte += partSize)
+    for (auto endByte = startByte; endByte < fileSize; endByte += partSize)
         partList.append(endByte);
-    partList.append(absoluteSize);
+    partList.append(fileSize);
 }
 
 bool PartsController::nextPart()

@@ -1,18 +1,20 @@
 #include "datasaver.h"
+#include <QDebug>
 
-DataSaver::DataSaver(const QString &filePath, QObject *parent) :
+DataSaver::DataSaver(QObject *parent) :
     QObject(parent)
 {
-    file.setFileName(filePath);
-    partsFile.setFileName(filePath + ".inf");
 }
 
 DataSaver::~DataSaver()
 {
+    qDebug() << "\nDataSaver DELETE!\n";
 }
 
-void DataSaver::prepareFiles(const QList<qint64> &parts)
+void DataSaver::prepareFiles(const QString &filePath, const QList<qint64> &parts)
 {
+    file.setFileName(filePath);
+    partsFile.setFileName(filePath + ".inf");
     prepareDestinationFile();
     preparePartsFile(parts);
 }

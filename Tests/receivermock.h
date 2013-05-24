@@ -8,6 +8,7 @@ class ReceiverMock : public QObject, public ReceiverInterface
     Q_OBJECT
 public:
     explicit ReceiverMock(QObject *parent = nullptr);
+    virtual ~ReceiverMock();
 
     virtual void replyReceivingStarted(QNetworkReply *reply);
 

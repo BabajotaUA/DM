@@ -8,6 +8,7 @@ Receiver::Receiver(QObject *parent) :
 
 Receiver::~Receiver()
 {
+    qDebug() << "n/Receiver DELETE!n/";
 }
 
 void Receiver::replyReceivingStarted(QNetworkReply *newReply)

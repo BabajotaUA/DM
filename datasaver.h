@@ -7,10 +7,10 @@ class DataSaver : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataSaver(const QString &filePath, QObject *parent = nullptr);
+    explicit DataSaver(QObject *parent = nullptr);
     virtual ~DataSaver();
 
-    void prepareFiles(const QList<qint64> &parts);
+    void prepareFiles(const QString &filePath, const QList<qint64> &parts);
     void save(const QByteArray &data, const QList<qint64> &parts);
 
 private:

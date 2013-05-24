@@ -45,10 +45,10 @@ private:
     bool downloadInfoVerification();
     void changeDownloadURL(const QString &source);
 
-    QSharedPointer<Sender> sender;
+    Sender sender;
     QSharedPointer<ReceiverInterface> receiver;
-    QSharedPointer<DataSaver> saver;
-    QSharedPointer<PartsController> parts;
-    QSharedPointer<SpeedCounter> speedCounter;
-    QSharedPointer<EstimatedTimeCounter> timeCounter;
+    DataSaver saver;
+    PartsController parts;
+    SpeedCounter speedCounter;
+    EstimatedTimeCounter timeCounter;
 };

@@ -1,4 +1,5 @@
 #include "sender.h"
+#include <QDebug>
 
 Sender::Sender(QObject *parent) :
     QObject(parent)
@@ -7,6 +8,7 @@ Sender::Sender(QObject *parent) :
 
 Sender::~Sender()
 {
+    qDebug() << "\nSender DELETE!\n";
 }
 
 QNetworkReply* Sender::requestDownloadInfo(const QUrl &sourceURL)
