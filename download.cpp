@@ -136,6 +136,9 @@ bool Download::downloadInfoVerification()
     if (fileName.isEmpty())
         fileName = sourceURL.path().split('/').last();
 
+    if (partSize == 0)
+        partSize = fileSize;
+
     qDebug() << "(Download) " << fileName << "size = " << fileSize;
 
     return true;

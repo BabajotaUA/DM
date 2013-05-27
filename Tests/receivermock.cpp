@@ -1,10 +1,10 @@
 #include "receivermock.h"
 #include <QDebug>
 
-ReceiverMock::ReceiverMock(QObject *parent) :
+ReceiverMock::ReceiverMock(const QByteArray &data, QObject *parent) :
     QObject(parent)
 {
-    testData = QByteArray("test_value 123");
+    testData = data;
 }
 
 ReceiverMock::~ReceiverMock()
@@ -42,9 +42,9 @@ QList<QNetworkReply::RawHeaderPair> ReceiverMock::prepareDownloadInfo()
     pair.first = "Content-Disposition";
     pair.second = QByteArray("attachment; filename=") + '"' + testFileName + '"';
     testInfoList.append(pair);
-    pair.first = "Accept-Ranges";
-    pair.second = "";
-    testInfoList.append(pair);
+    /*pair.first = "Accept-Ranges";
+    pair.second = "bytes";
+    testInfoList.append(pair);*/
 
     return testInfoList;
 }

@@ -8,8 +8,9 @@
 
 void TestDownload::testStartDownload()
 {
-    Download item = Download("http://test_file.txt", QDir::currentPath()+"/");
-    auto receiver = new ReceiverMock(&item);
+    auto data = QByteArray("test_value fgdfhdfjhdfgjfgj3");
+    auto item = Download("http://test_file.txt", QDir::currentPath()+"/");
+    auto receiver = new ReceiverMock(data, &item);
     item.newDownloadFactory(receiver);
 
     QObject::connect(receiver, SIGNAL(downloadInfoRecived(QList<QNetworkReply::RawHeaderPair>)),
@@ -22,5 +23,6 @@ void TestDownload::testStartDownload()
     item.startDownload();
 
     QCOMPARE(item.getState(), Download::Downloading);
+
 
 }
