@@ -33,4 +33,5 @@ HEADERS += \
     estimatedtimecounter.h \
     downloadinterface.h \
     download.h \
-    receiverinterface.h
+    receiverinterface.h \
+    datasaverinterface.h

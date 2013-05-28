@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include "../download.h"
 
 class TestDownload : public QObject
 {
@@ -8,4 +9,6 @@ class TestDownload : public QObject
 
 private slots:
     void testStartDownload();
+    void testPauseDownload();
+    void testDeleteDownload();
 };

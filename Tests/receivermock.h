@@ -11,6 +11,7 @@ public:
     virtual ~ReceiverMock();
 
     virtual void replyReceivingStarted(QNetworkReply *reply);
+    QByteArray* getDataImmediatly() const;
 
 signals:
     void downloadInfoRecived(QList<QNetworkReply::RawHeaderPair>);

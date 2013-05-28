@@ -1,7 +1,7 @@
 #pragma once
 
 #include "partscontroller.h"
-#include "datasaver.h"
+#include "datasaverinterface.h"
 #include "receiverinterface.h"
 #include "sender.h"
 #include "speedcounter.h"
@@ -26,7 +26,7 @@ public:
     void pauseDownload();
     void deleteDownload();
 
-    void newDownloadFactory(ReceiverInterface *receiverImplementation);
+    void newDownloadFactory(ReceiverInterface *receiverImplementation, DataSaverInterface *dataSaverImplementation);
     State getState() const;
 
 public slots:
@@ -47,7 +47,7 @@ private:
 
     Sender sender;
     QSharedPointer<ReceiverInterface> receiver;
-    DataSaver saver;
+    QSharedPointer<DataSaverInterface> saver;
     PartsController parts;
     SpeedCounter speedCounter;
     EstimatedTimeCounter timeCounter;

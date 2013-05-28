@@ -27,6 +27,11 @@ void ReceiverMock::replyReceivingStarted(QNetworkReply *reply)
     }
 }
 
+QByteArray *ReceiverMock::getDataImmediatly() const
+{
+    return &testData.left(testData.size()/2);
+}
+
 
 QList<QNetworkReply::RawHeaderPair> ReceiverMock::prepareDownloadInfo()
 {

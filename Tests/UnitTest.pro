@@ -16,8 +16,8 @@ SOURCES += \
     ../sender.cpp \
     ../partscontroller.cpp \
     ../estimatedtimecounter.cpp \
-    ../datasaver.cpp \
-    receivermock.cpp
+    receivermock.cpp \
+    datasavermock.cpp
 
 HEADERS += \
     testdownload.h \
@@ -28,5 +28,6 @@ HEADERS += \
     ../partscontroller.h \
     ../estimatedtimecounter.h \
     ../downloadinterface.h \
-    ../datasaver.h \
-    receivermock.h
+    receivermock.h \
+    datasavermock.h \
+    ../datasaverinterface.h

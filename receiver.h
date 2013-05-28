@@ -12,7 +12,8 @@ public:
     explicit Receiver(QObject *parent = nullptr);
     virtual ~Receiver();
 
-    virtual void replyReceivingStarted(QNetworkReply *newReply);
+    void replyReceivingStarted(QNetworkReply *newReply);
+    QByteArray* getDataImmediatly() const;
 
 signals:
     void downloadInfoRecived(QList<QNetworkReply::RawHeaderPair>);

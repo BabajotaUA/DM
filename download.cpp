@@ -35,12 +35,15 @@ void Download::startDownload()
 
 void Download::pauseDownload()
 {
-    currentState = Paused;
+    if (currentState == Downloading)
+    {
+        currentState = Paused;
+        return;
+    }
 }
 
 void Download::deleteDownload()
 {
-
 }
 
 void Download::changeDownloadURL(const QString &source)
@@ -88,20 +91,23 @@ void Download::saveData(QByteArray *data)
 {
     if (parts.nextPart())
     {
+        saver->save(*data, parts.getParts());
         continueDownload();
     }
     else
     {
-        qDebug() << "\n(Download) FINISHED!\n";
+        saver->save(*data, parts.getParts());
+        saver->deleteFiles();
         currentState = Finished;
         emit downloadDataChanged();
+        qDebug() << "\n(Download) FINISHED!\n";
     }
-    saver.save(*data, parts.getParts());
 }
 
-void Download::newDownloadFactory(ReceiverInterface *receiverImplementation)
+void Download::newDownloadFactory(ReceiverInterface *receiverImplementation, DataSaverInterface *dataSaverImplementation)
 {
     receiver = QSharedPointer<ReceiverInterface>(receiverImplementation);
+    saver = QSharedPointer<DataSaverInterface>(dataSaverImplementation);
 }
 
 void Download::prepareDownload()
@@ -113,7 +119,7 @@ void Download::prepareDownload()
         return;
     }
     parts.calculation(fileSize, partSize);
-    saver.prepareFiles(fileDestination + fileName, parts.getParts());
+    saver->prepareFiles(fileDestination + fileName, parts.getParts());
     continueDownload();
 }
 

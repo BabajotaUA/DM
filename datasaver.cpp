@@ -32,6 +32,13 @@ void DataSaver::save(const QByteArray &data, const QList<qint64> &parts)
     file.close();
 }
 
+void DataSaver::deleteFiles(bool withDataFile)
+{
+    partsFile.remove();
+    if (withDataFile)
+        file.remove();
+}
+
 void DataSaver::prepareDestinationFile()
 {
     if (!file.open(QIODevice::WriteOnly))

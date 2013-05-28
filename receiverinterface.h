@@ -1,10 +1,10 @@
 #pragma once
 #include <QtNetwork/QNetworkReply>
-#include <QDebug>
 
 class ReceiverInterface
 {
 public:
-    virtual ~ReceiverInterface() { qDebug() << "\nReceiverInterface DELETE!\n"; }
+    virtual ~ReceiverInterface() {}
     virtual void replyReceivingStarted(QNetworkReply*) = 0;
+    virtual QByteArray* getDataImmediatly() const = 0;
 };

@@ -1,9 +1,10 @@
 #pragma once
 
+#include "datasaverinterface.h"
 #include <QtCore/QObject>
 #include <QtCore/QFile>
 
-class DataSaver : public QObject
+class DataSaver : public QObject, public DataSaverInterface
 {
     Q_OBJECT
 public:
@@ -12,6 +13,7 @@ public:
 
     void prepareFiles(const QString &filePath, const QList<qint64> &parts);
     void save(const QByteArray &data, const QList<qint64> &parts);
+    void deleteFiles(bool withDataFile = false);
 
 private:
     void prepareDestinationFile();
