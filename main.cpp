@@ -16,6 +16,8 @@ int main(int argc, char *argv[])
                      &item, SLOT(setDownloadInfo(QList<QNetworkReply::RawHeaderPair>)));
     QObject::connect(receiverImplementation, SIGNAL(downloadDataRecived(QByteArray*)),
                      &item, SLOT(saveData(QByteArray*)));
+    QObject::connect(receiverImplementation, SIGNAL(downloadBytesDownloaded(qint64)),
+                     &item, SLOT(setDownloadProgress(qint64)));
 
     item.startDownload();
 

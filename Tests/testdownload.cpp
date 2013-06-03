@@ -9,12 +9,11 @@
 
 void TestDownload::testStartDownload()
 {
-    auto data = QByteArray("test_value fgdfhdfjhdfgjfgj3");
+    auto data = QByteArray("test_value 1");
     auto item = Download("http://test_file.txt", QDir::currentPath()+"/");
     auto receiver = new ReceiverMock(data, &item);
     auto saver = new DataSaverMock(&item);
     item.newDownloadFactory(receiver, saver);
-    QSignalSpy spy(&item, SIGNAL(downloadDataChanged()));
 
     QObject::connect(receiver, SIGNAL(downloadInfoRecived(QList<QNetworkReply::RawHeaderPair>)),
                      &item, SLOT(setDownloadInfo(QList<QNetworkReply::RawHeaderPair>)));
@@ -27,11 +26,17 @@ void TestDownload::testStartDownload()
 
     QCOMPARE(item.getState(), Download::Downloading);
 
+    QList<qint64> parts;
+    parts.append(0);
+    parts.append(data.size());
+
+    QCOMPARE(saver->getMockData(), data);
+    qDebug() << saver->getMockParts();
 }
 
 void TestDownload::testPauseDownload()
 {
-    auto data = QByteArray("test_value fgdfhdfjhdfgjfgj3");
+    auto data = QByteArray("test_value 2");
     auto item = Download("http://test_file.txt", QDir::currentPath()+"/");
     auto receiver = new ReceiverMock(data, &item);
     auto saver = new DataSaverMock(&item);
@@ -53,7 +58,7 @@ void TestDownload::testPauseDownload()
 
 void TestDownload::testDeleteDownload()
 {
-    auto data = QByteArray("test_value fgdfhdfjhdfgjfgj3");
+    auto data = QByteArray("test_value 3");
     auto item = Download("http://test_file.txt", QDir::currentPath()+"/");
     auto receiver = new ReceiverMock(data, &item);
     auto saver = new DataSaverMock(&item);

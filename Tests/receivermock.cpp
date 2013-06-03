@@ -9,7 +9,6 @@ ReceiverMock::ReceiverMock(const QByteArray &data, QObject *parent) :
 
 ReceiverMock::~ReceiverMock()
 {
-    qDebug() << "\nReceiverMock DELETE!\n";
 }
 
 void ReceiverMock::replyReceivingStarted(QNetworkReply *reply)

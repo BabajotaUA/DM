@@ -4,6 +4,7 @@
 Receiver::Receiver(QObject *parent) :
     QObject(parent)
 {
+    bytesCompleted = 0;
 }
 
 Receiver::~Receiver()
@@ -29,6 +30,7 @@ QByteArray *Receiver::getDataImmediatly() const
 
 void Receiver::replyReceivingProgress(qint64 bytesDownloaded, qint64 bytesTotal)
 {
+    emit downloadBytesDownloaded(bytesCompleted + bytesDownloaded);
 }
 
 void Receiver::replyReceivingFinished()
@@ -39,6 +41,7 @@ void Receiver::replyReceivingFinished()
         emit downloadInfoRecived(reply->rawHeaderPairs());
         break;
     case QNetworkAccessManager::GetOperation:
+        bytesCompleted += reply->readAll().size();
         emit downloadDataRecived(&reply->readAll());
         break;
     default:
