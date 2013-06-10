@@ -15,7 +15,7 @@ public:
 
 signals:
     void downloadInfoRecived(QList<QNetworkReply::RawHeaderPair>);
-    void downloadDataRecived(QByteArray *data);
+    void downloadDataRecived(QByteArray &data);
 
 private:
     QList<QNetworkReply::RawHeaderPair> prepareDownloadInfo();

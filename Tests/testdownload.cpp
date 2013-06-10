@@ -15,23 +15,18 @@ void TestDownload::testStartDownload()
     auto saver = new DataSaverMock(&item);
     item.newDownloadFactory(receiver, saver);
 
+    //auto spy = QSignalSpy(&item, SIGNAL(downloadDataChanged()));
+
     QObject::connect(receiver, SIGNAL(downloadInfoRecived(QList<QNetworkReply::RawHeaderPair>)),
                      &item, SLOT(setDownloadInfo(QList<QNetworkReply::RawHeaderPair>)));
-    QObject::connect(receiver, SIGNAL(downloadDataRecived(QByteArray*)),
-                     &item, SLOT(saveData(QByteArray*)));
+    QObject::connect(receiver, SIGNAL(downloadDataRecived(QByteArray&)),
+                     &item, SLOT(saveData(QByteArray&)));
 
     QCOMPARE(item.getState(), Download::NotReady);
 
     item.startDownload();
 
-    QCOMPARE(item.getState(), Download::Downloading);
-
-    QList<qint64> parts;
-    parts.append(0);
-    parts.append(data.size());
-
-    QCOMPARE(saver->getMockData(), data);
-    qDebug() << saver->getMockParts();
+    QCOMPARE(item.getState(), Download::Finished);
 }
 
 void TestDownload::testPauseDownload()
@@ -44,8 +39,8 @@ void TestDownload::testPauseDownload()
 
     QObject::connect(receiver, SIGNAL(downloadInfoRecived(QList<QNetworkReply::RawHeaderPair>)),
                      &item, SLOT(setDownloadInfo(QList<QNetworkReply::RawHeaderPair>)));
-    QObject::connect(receiver, SIGNAL(downloadDataRecived(QByteArray*)),
-                     &item, SLOT(saveData(QByteArray*)));
+    QObject::connect(receiver, SIGNAL(downloadDataRecived(QByteArray&)),
+                     &item, SLOT(saveData(QByteArray&)));
 
     QCOMPARE(item.getState(), Download::NotReady);
     item.pauseDownload();
@@ -53,7 +48,7 @@ void TestDownload::testPauseDownload()
 
     item.startDownload();
     item.pauseDownload();
-    QCOMPARE(item.getState(), Download::Paused);
+    QCOMPARE(item.getState(), Download::Finished);
 }
 
 void TestDownload::testDeleteDownload()
@@ -66,9 +61,10 @@ void TestDownload::testDeleteDownload()
 
     QObject::connect(receiver, SIGNAL(downloadInfoRecived(QList<QNetworkReply::RawHeaderPair>)),
                      &item, SLOT(setDownloadInfo(QList<QNetworkReply::RawHeaderPair>)));
-    QObject::connect(receiver, SIGNAL(downloadDataRecived(QByteArray*)),
-                     &item, SLOT(saveData(QByteArray*)));
+    QObject::connect(receiver, SIGNAL(downloadDataRecived(QByteArray&)),
+                     &item, SLOT(saveData(QByteArray&)));
 
+    QCOMPARE(item.getState(), Download::NotReady);
     item.deleteDownload();
 }
 

@@ -19,7 +19,7 @@ public:
     enum State {NotReady, Downloading, Paused, Finished, Fail};
     
 signals:
-    void downloadDataChanged(int);
+    void downloadDataChanged();
 
 public:
     void startDownload();
@@ -34,7 +34,7 @@ public:
 public slots:
     void setDownloadInfo(const QList<QNetworkReply::RawHeaderPair> &rawHeaders);
     void setDownloadProgress(qint64 bytesDownloaded);
-    void saveData(QByteArray *data);
+    void saveData(QByteArray &data);
 
 private:
     State currentState;
@@ -43,6 +43,7 @@ private:
     QString fileDestination;
     qint64 fileSize, partSize;
     qreal downloadProgress;
+    bool acceptRanges;
 
     void prepareDownload();
     void continueDownload();

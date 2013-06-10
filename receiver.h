@@ -13,11 +13,11 @@ public:
     virtual ~Receiver();
 
     void replyReceivingStarted(QNetworkReply *newReply);
-    QByteArray* getDataImmediatly() const;
+    QByteArray *getDataImmediatly() const;
 
 signals:
     void downloadInfoRecived(QList<QNetworkReply::RawHeaderPair>);
-    void downloadDataRecived(QByteArray *data);
+    void downloadDataRecived(QByteArray &data);
     void downloadBytesDownloaded(qint64);
 
 private slots:
@@ -27,5 +27,6 @@ private slots:
 
 private:
     QSharedPointer<QNetworkReply> reply;
-    qint64 bytesCompleted;
+    QByteArray replyData;
+    qint64 bytesCompleted, bytesPart;
 };

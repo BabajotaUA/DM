@@ -19,7 +19,7 @@ void ReceiverMock::replyReceivingStarted(QNetworkReply *reply)
         emit downloadInfoRecived(prepareDownloadInfo());
         break;
     case QNetworkAccessManager::GetOperation:
-        emit downloadDataRecived(&testData);
+        emit downloadDataRecived(testData);
         break;
     default:
         break;
@@ -46,9 +46,9 @@ QList<QNetworkReply::RawHeaderPair> ReceiverMock::prepareDownloadInfo()
     pair.first = "Content-Disposition";
     pair.second = QByteArray("attachment; filename=") + '"' + testFileName + '"';
     testInfoList.append(pair);
-    /*pair.first = "Accept-Ranges";
+    pair.first = "Accept-Ranges";
     pair.second = "bytes";
-    testInfoList.append(pair);*/
+    testInfoList.append(pair);
 
     return testInfoList;
 }

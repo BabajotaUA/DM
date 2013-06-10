@@ -12,6 +12,7 @@ Download::Download(const QString &source, const QString &destination, QObject *p
     fileSize = 0;
     partSize = 0;
     downloadProgress = 0;
+    acceptRanges = false;
 }
 
 Download::~Download()
@@ -39,7 +40,7 @@ void Download::pauseDownload()
     {
         auto data = receiver->getDataImmediatly();
         currentState = Paused;
-        emit downloadDataChanged(currentState);
+        emit downloadDataChanged();
     }
 }
 
@@ -87,6 +88,7 @@ void Download::setDownloadInfo(const QList<QNetworkReply::RawHeaderPair> &rawHea
 
         if (headPair.first == "Accept-Ranges") {
             partSize = 4000000;
+            acceptRanges = true;
         }
     }
     prepareDownload();
@@ -95,23 +97,22 @@ void Download::setDownloadInfo(const QList<QNetworkReply::RawHeaderPair> &rawHea
 void Download::setDownloadProgress(qint64 bytesDownloaded)
 {
     downloadProgress = 100.0 * bytesDownloaded / fileSize;
-    emit downloadDataChanged(Downloading);
+    emit downloadDataChanged();
 }
 
-void Download::saveData(QByteArray *data)
+void Download::saveData(QByteArray &data)
 {
     if (parts.nextPart())
     {
-        saver->save(*data, parts.getParts());
+        saver->save(data, parts.getParts());
         continueDownload();
     }
     else
     {
-        qDebug() << "\n(Download) FINISHED!\n";
-        saver->save(*data, parts.getParts());
-        saver->deleteFiles();
         currentState = Finished;
-        emit downloadDataChanged(Finished);
+        saver->save(data, parts.getParts());
+        emit downloadDataChanged();
+        qDebug() << "\n(Download) FINISHED!\n";
     }
 }
 
@@ -131,18 +132,19 @@ void Download::prepareDownload()
     if (!downloadInfoVerification())
     {
         currentState = Fail;
-        emit downloadDataChanged(Fail);
+        emit downloadDataChanged();
         return;
     }
     parts.calculation(fileSize, partSize);
     saver->prepareFiles(fileDestination + fileName, parts.getParts());
+    emit downloadDataChanged();
     continueDownload();
 }
 
 void Download::continueDownload()
 {
-    receiver->replyReceivingStarted(sender.requestDownloadData(parts.actual()));
     currentState = Downloading;
+    receiver->replyReceivingStarted(sender.requestDownloadData(parts.actual()));
 }
 
 bool Download::downloadInfoVerification()
@@ -159,6 +161,8 @@ bool Download::downloadInfoVerification()
 
     if (partSize == 0)
         partSize = fileSize;
+
+    qDebug() << fileName << fileSize << acceptRanges;
 
     return true;
 }

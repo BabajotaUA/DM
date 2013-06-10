@@ -27,8 +27,8 @@ bool PartsController::nextPart()
     }
     else {
         partList.removeFirst();
+        return true;
     }
-    return true;
 }
 
 QPair<qint64, qint64> PartsController::actual() const

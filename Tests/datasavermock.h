@@ -14,7 +14,7 @@ public:
     void deleteFiles(bool withDataFile);
 
     QByteArray getMockData() const;
-    QList<qint64> getMockParts();
+    qint64 getMockParts();
 
 private:
     QByteArray mockData;

@@ -24,7 +24,10 @@ void DataSaver::save(const QByteArray &data, const QList<qint64> &parts)
     preparePartsFile(parts);
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Append))
+    {
+        qDebug() << "Write ERROR";
         return;
+    }
 
     file.write(data);
 
@@ -51,7 +54,10 @@ void DataSaver::prepareDestinationFile()
 void DataSaver::preparePartsFile(const QList<qint64> &parts)
 {
     if (parts.isEmpty())
+    {
+        deleteFiles(false);
         return;
+    }
 
     if (!partsFile.open(QIODevice::WriteOnly))
         return;

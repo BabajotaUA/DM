@@ -7,14 +7,14 @@ DataSaverMock::DataSaverMock(QObject *parent) :
 
 void DataSaverMock::save(const QByteArray &data, const QList<qint64> &parts)
 {
-    qDebug() << "(DataSaverMock) Data wil be saved";
+    qDebug() << "(DataSaverMock) Data wil be saved\n";
     mockData = data;
     mockParts = parts;
 }
 
 void DataSaverMock::prepareFiles(const QString &filePath, const QList<qint64> &parts)
 {
-    qDebug() << "(DataSaverMock) Files will be created at:" << filePath;
+    qDebug() << "(DataSaverMock) Files will be created at:" << filePath << parts;
     mockFilePath = filePath;
     mockParts = parts;
 }
@@ -32,7 +32,7 @@ QByteArray DataSaverMock::getMockData() const
     return mockData;
 }
 
-QList<qint64> DataSaverMock::getMockParts()
+qint64 DataSaverMock::getMockParts()
 {
-    return mockParts;
+    return mockParts.size();
 }
